@@ -48,6 +48,12 @@
               <a-button v-if="!editMode" type="default" @click="exportAsImage">
                 {{ t('result.exportImage') }}
               </a-button>
+              <a-button v-if="!editMode" type="default" @click="exportAsPdf">
+                {{ t('result.exportPdf') }}
+              </a-button>
+              <a-button v-if="!editMode" type="default" @click="shareTrip">
+                {{ t('result.shareTrip') }}
+              </a-button>
             </a-space>
           </div>
         </div>
@@ -579,6 +585,7 @@ import { message } from 'ant-design-vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { Loader as GoogleMapsLoader } from '@googlemaps/js-api-loader'
 import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
 import * as echarts from 'echarts'
 import Swiper from 'swiper'
 import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules'
@@ -2166,6 +2173,123 @@ const exportAsImage = async () => {
   } catch (error: any) {
     console.error('导出图片失败:', error)
     message.error({ content: t('result.messages.imageFailed', { error: error.message }), key: 'export' })
+  }
+}
+
+// 导出为 PDF
+const exportAsPdf = async () => {
+  try {
+    message.loading({ content: t('result.messages.generatingPdf'), key: 'export', duration: 0 })
+
+    const mapDataUrl = await captureMapScreenshot()
+
+    const exportContainer = document.createElement('div')
+    exportContainer.innerHTML = buildExportHTML(mapDataUrl)
+    exportContainer.style.position = 'absolute'
+    exportContainer.style.left = '-9999px'
+    exportContainer.style.width = '800px'
+    document.body.appendChild(exportContainer)
+
+    const images = exportContainer.querySelectorAll('img')
+    await Promise.all(
+      Array.from(images).map(img =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise(resolve => {
+              img.onload = resolve
+              img.onerror = resolve
+            })
+      )
+    )
+
+    const canvas = await html2canvas(exportContainer, {
+      backgroundColor: '#f0f2f5',
+      scale: 2,
+      logging: false,
+      useCORS: true,
+      allowTaint: true
+    })
+
+    document.body.removeChild(exportContainer)
+
+    const imgData = canvas.toDataURL('image/png')
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+    const pageWidth = pdf.internal.pageSize.getWidth()
+    const pageHeight = pdf.internal.pageSize.getHeight()
+    const imgWidth = pageWidth - 20
+    const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+    let heightLeft = imgHeight
+    let position = 10
+
+    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+    heightLeft -= (pageHeight - 20)
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight + 10
+      pdf.addPage()
+      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight)
+      heightLeft -= (pageHeight - 20)
+    }
+
+    const fileName = `${t('result.export.filePrefix')}_${tripPlan.value?.city}_${new Date().getTime()}.pdf`
+    pdf.save(fileName)
+
+    message.success({ content: t('result.messages.pdfSuccess'), key: 'export' })
+  } catch (error: any) {
+    console.error('导出 PDF 失败:', error)
+    message.error({ content: t('result.messages.pdfFailed', { error: error.message }), key: 'export' })
+  }
+}
+
+// 分享行程
+const shareTrip = async () => {
+  if (!tripPlan.value) return
+  const tp = tripPlan.value
+  const lines: string[] = []
+  lines.push(`${t('result.export.title', { city: tp.city })}`)
+  lines.push(`${t('result.export.subtitle', { start: tp.start_date || '', end: tp.end_date || '', days: tp.days?.length || 0 })}`)
+  lines.push('')
+
+  tp.days.forEach((day, i) => {
+    lines.push(`${t('result.export.dayTitle', { day: i + 1 })} ${day.date || ''}`)
+    day.attractions.forEach((a, ai) => {
+      lines.push(`  ${ai + 1}. ${a.name} — ${a.address || ''}`)
+    })
+    if (day.meals?.length) {
+      const mealLabels: Record<string, string> = {
+        breakfast: t('result.meals.breakfast'),
+        lunch: t('result.meals.lunch'),
+        dinner: t('result.meals.dinner'),
+        snack: t('result.meals.snack'),
+      }
+      const mealText = day.meals.map(m => `${mealLabels[m.type] || m.type}: ${m.name}`).join(' / ')
+      lines.push(`  ${t('result.export.mealTitle')}: ${mealText}`)
+    }
+    lines.push('')
+  })
+
+  if (tp.budget) {
+    lines.push(`${t('result.budget.total')}: ¥${tp.budget.total || 0}`)
+    lines.push('')
+  }
+
+  lines.push(t('result.export.footer'))
+
+  const text = lines.join('\n')
+  try {
+    await navigator.clipboard.writeText(text)
+    message.success({ content: t('result.messages.shareCopied'), key: 'share' })
+  } catch {
+    const ta = document.createElement('textarea')
+    ta.value = text
+    ta.style.position = 'fixed'
+    ta.style.left = '-9999px'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+    message.success({ content: t('result.messages.shareCopied'), key: 'share' })
   }
 }
 // ========== 知识图谱初始化 ==========

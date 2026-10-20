@@ -158,6 +158,7 @@
     "exportTrip": "导出行程",
     "exportImage": "导出攻略",
     "exportPdf": "导出为 PDF",
+    "shareTrip": "分享行程",
     "side": {
       "overview": "行程概览",
       "budget": "预算明细",
@@ -261,7 +262,8 @@
       "pdfSuccess": "PDF 导出成功!",
       "pdfFailed": "导出 PDF 失败: {error}",
       "mapLoaded": "地图加载成功",
-      "mapLoadFailed": "地图加载失败"
+      "mapLoadFailed": "地图加载失败",
+      "shareCopied": "行程已复制到剪贴板"
     },
     "graph": {
       "type": "类型",

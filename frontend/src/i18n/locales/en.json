@@ -158,6 +158,7 @@
     "exportTrip": "Export Trip",
     "exportImage": "Export Guide",
     "exportPdf": "Export as PDF",
+    "shareTrip": "Share Trip",
     "side": {
       "overview": "Overview",
       "budget": "Budget",
@@ -261,7 +262,8 @@
       "pdfSuccess": "PDF exported successfully!",
       "pdfFailed": "PDF export failed: {error}",
       "mapLoaded": "Map loaded successfully",
-      "mapLoadFailed": "Failed to load map"
+      "mapLoadFailed": "Failed to load map",
+      "shareCopied": "Trip copied to clipboard"
     },
     "graph": {
       "type": "Type",

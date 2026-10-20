@@ -158,6 +158,7 @@
     "exportTrip": "旅程をエクスポート",
     "exportImage": "旅のしおりを出力",
     "exportPdf": "PDF として保存",
+    "shareTrip": "旅程を共有",
     "side": {
       "overview": "旅程概要",
       "budget": "予算内訳",
@@ -261,7 +262,8 @@
       "pdfSuccess": "PDF のエクスポートに成功しました!",
       "pdfFailed": "PDF のエクスポートに失敗しました: {error}",
       "mapLoaded": "地図の読み込みに成功しました",
-      "mapLoadFailed": "地図の読み込みに失敗しました"
+      "mapLoadFailed": "地図の読み込みに失敗しました",
+      "shareCopied": "旅程をクリップボードにコピーしました"
     },
     "graph": {
       "type": "種類",
