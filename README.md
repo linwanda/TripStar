@@ -296,33 +296,3 @@ TripStar/
 <img width="1599" height="823" alt="image" src="https://github.com/user-attachments/assets/a262a33d-4dbc-4f5a-b392-9b2d0ab66a31" />
 <img width="1599" height="741" alt="image" src="https://github.com/user-attachments/assets/2c236df0-6ad2-44a0-8976-93d84ea14b1f" />
 
-
-
-
-## 后续优化方向
-- [x] ~~接入小红书，获得高质量计划~~
-- [x] ~~景点图片改为从小红书获取~~
-- [x] ~~景点提前预约提示~~
-- [x] ~~接入 Google Maps，实现国内外双引擎自动降级回退~~
-- [x] ~~模型返回语言国际化适配及底层知识图谱多语言支持~~
-- [x] ~~可查看历史计划支持，通过任务和后端持久化解决~~
-- [x] ~~支持代理配置 (HTTP/SOCKS5) 以确保国内可用 Google 服务~~
-- [x] ~~修改导出图片的外观，增加地图，提高可读性~~
-- [x] ~~支持多城市旅行~~
-- [ ] 添加小红书链接以及美食推荐增强
-- [ ] 前端优化
-- [ ] 车程信息
-- [ ] 服务器在线部署
-
-
-
-## Star History
-
-<a href="https://www.star-history.com/?repos=1sdv%2Ftripstar&type=date&legend=bottom-right">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=1sdv/tripstar&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=1sdv/tripstar&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=1sdv/tripstar&type=date&legend=top-left" />
- </picture>
-</a>
-
