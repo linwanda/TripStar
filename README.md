@@ -19,6 +19,8 @@
 **基于 HelloAgents 框架打造的多智能体协作文旅规划平台**
 </div>
 
+> 本项目基于 [1sdv/TripStar](https://github.com/1sdv/TripStar) 二次开发，新增了 PDF 行程导出、行程分享等功能。
+
 
 
 > [!IMPORTANT]
